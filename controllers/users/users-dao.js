@@ -38,10 +38,7 @@ export const createUser = async (db, requestBody) => {
         db.query('CALL create_user(?, ?, ?, ?)', [user_id, password, first_name, last_name], (err, result) => {
             if (err) throw reject(err);
             if (!result[0][0].success) reject(result[0][0].message);
-            resolve({
-                status: 200,
-                body: requestBody
-            });
+            resolve(requestBody);
         });
     });
 };
@@ -68,10 +65,7 @@ export const updateUserPassword = async (db, requestBody) => {
         db.query('CALL update_user_password(?, ?)', [user_id, password], (err, result) => {
             if (err) reject(err);
             if (!result[0][0].success) reject(result[0][0].message);
-            resolve({
-                status: 200,
-                body: requestBody
-            });
+            resolve(resolve(requestBody));
         });
     });
 }

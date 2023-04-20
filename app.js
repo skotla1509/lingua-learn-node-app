@@ -1,12 +1,29 @@
 import mysql from 'mysql';
 import express from 'express';
+import session from 'express-session';
 import cors from 'cors';
 import UsersController from "./controllers/users/users-controller.js";
+import SessionController from "./controllers/users/session-controller.js";
 
 // Initialise app
 const app = express();
 app.use(express.json());
-app.use(cors());
+let sess = {
+    secret: "SECRET",
+    cookie: { secure: false }
+};
+if (process.env.ENV === 'production') {
+
+    app.set('trust proxy', 1)
+    sess.cookie.secure = true;
+}
+app.use(session(sess));
+app.use(cors(
+    {
+        credentials: true,
+        origin: 'http://localhost:3000'
+    }
+));
 
 // Connect to DB
 const connection = mysql.createConnection({
@@ -27,6 +44,7 @@ connection.connect((err) => {
 
 // Controllers
 UsersController(app, connection);
+SessionController(app);
 
 
 // Listen on port 5000

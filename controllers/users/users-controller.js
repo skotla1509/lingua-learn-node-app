@@ -5,6 +5,7 @@ const UserController = (app, db) => {
     app.post('/changepassword', (req, res) => changePassword(req, res, db))
     app.post('/login', (req, res) => login(req, res, db))
     app.post('/logout', (req, res) => logout(req, res, db))
+    app.post('/profile', profile)
 
     /*
     app.get('/api/users', (req, res) => findUsers(req, res, db));
@@ -39,8 +40,10 @@ const login = async (req, res, db) => {
     try {
         const credentials = req.body;
         const existingUser = await usersDao.findUserByCredentials(db, credentials);
-        if (existingUser) {
-            res.sendStatus(200);
+        if (existingUser.length > 0) {
+            existingUser[0].password = '';
+            req.session['currentUser'] = existingUser[0];
+            res.json(existingUser[0]);
             return;
         }
         res.sendStatus(403)
@@ -73,6 +76,14 @@ const changePassword = async (req, res, db) => {
 const logout = (req, res, db) => {
     req.session.destroy()
     res.sendStatus(200)
+}
+
+const profile = (req, res) => {
+    if (req.session['currentUser']) {
+        res.send(req.session['currentUser'])
+    } else {
+        res.sendStatus(403)
+    }
 }
 
 export default UserController;
