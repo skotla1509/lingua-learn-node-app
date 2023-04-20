@@ -2,8 +2,9 @@ import mysql from 'mysql';
 import express from 'express';
 import session from 'express-session';
 import cors from 'cors';
-import UsersController from "./controllers/users/users-controller.js";
-import SessionController from "./controllers/users/session-controller.js";
+import UsersController from "./controllers/users-controller.js";
+import SessionController from "./controllers/session-controller.js";
+import AppController from "./controllers/app-controller.js";
 
 // Initialise app
 const app = express();
@@ -44,6 +45,7 @@ connection.connect((err) => {
 
 // Controllers
 UsersController(app, connection);
+AppController(app, connection);
 SessionController(app);
 
 
