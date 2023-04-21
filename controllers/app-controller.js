@@ -75,6 +75,19 @@ const getAllCardsForDeck = async (req, res, db) => {
     }
 }
 
+//Get all posts for Language
+const getAllPracticeQuestionsForDeck = async (req, res, db) => {
+    try {
+        const deck_id = req.params['id']
+        const result = await appDao.getAllPracticeQuestionsForDeck(db, {deck_id} );
+        res.json(result);
+    }
+    catch (err) {
+        console.log(err);
+        res.sendStatus(500);
+    }
+}
+
 
 
 export default AppController;

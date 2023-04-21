@@ -51,3 +51,14 @@ export const getAllCardsForDeck = async (db, requestBody) => {
         });
     });
 };
+
+//Return all cards for deck
+export const getAllPracticeQuestionsForDeck = async (db, requestBody) => {
+    const {deck_id} = requestBody;
+    return new Promise((resolve, reject) => {
+        db.query('CALL find_all_questions_by_deck( ? )', [deck_id], (err, result) => {
+            if (err) reject(err);
+            resolve(result[0]);
+        });
+    });
+};
