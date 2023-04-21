@@ -52,7 +52,7 @@ export const getAllCardsForDeck = async (db, requestBody) => {
     });
 };
 
-//Return all cards for deck
+//Return all questions for deck
 export const getAllPracticeQuestionsForDeck = async (db, requestBody) => {
     const {deck_id} = requestBody;
     return new Promise((resolve, reject) => {
@@ -62,3 +62,16 @@ export const getAllPracticeQuestionsForDeck = async (db, requestBody) => {
         });
     });
 };
+
+
+//Create a new entry for practice history for deck
+export const createPracticeHistoryForLanguage = async (db, requestBody) => {
+    const {user_id, deck_id, score} = requestBody;
+    return new Promise((resolve, reject) => {
+        db.query('CALL create_practice_history_for_deck( ?, ? ,? )', [user_id,deck_id,score], (err, result) => {
+            if (err) reject(err);
+            resolve(result[1][0]);
+        });
+    });
+};
+

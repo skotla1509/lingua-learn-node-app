@@ -6,6 +6,8 @@ const AppController = (app, db) => {
     app.get('/api/languages/posts/:id', (req, res) => getAllPostsForLanguages(req, res, db))
     app.post('/api/languages/posts/:id/new', (req, res) => createPostForLanguage(req, res, db))
     app.get('/api/languages/decks/:id/cards', (req, res) => getAllCardsForDeck(req, res, db))
+    app.get('/api/languages/decks/:id/questions', (req, res) => getAllPracticeQuestionsForDeck(req, res, db))
+    app.post('/api/languages/decks/:id/practice', (req, res) => createPracticeHistoryForLanguage(req, res, db))
 };
 
 
@@ -88,6 +90,19 @@ const getAllPracticeQuestionsForDeck = async (req, res, db) => {
     }
 }
 
+//Get all posts for Language
+const createPracticeHistoryForLanguage = async (req, res, db) => {
+    try {
+        const deck_id = req.params['id']
+        const requestBody = {...req.body,deck_id}
+        const result = await appDao.createPracticeHistoryForLanguage(db, requestBody );
+        res.json(result);
+    }
+    catch (err) {
+        console.log(err);
+        res.sendStatus(500);
+    }
+}
 
 
 export default AppController;
