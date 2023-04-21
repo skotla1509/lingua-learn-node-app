@@ -1,4 +1,24 @@
 // READ operation by user id
+export const getUserStatistics = async (db, requestBody) => {
+    const {user_id} = requestBody;
+    return new Promise((resolve, reject) => {
+        db.query('CALL find_user_flashcard_stats(?)', [user_id], (err, result) => {
+            if (err) reject(err);
+            resolve(result[0]);
+        });
+    });
+};
+
+export const getUserLanguages = async (db, requestBody) => {
+    const {user_id} = requestBody;
+    return new Promise((resolve, reject) => {
+        db.query('CALL find_languages_of_user(?)', [user_id], (err, result) => {
+            if (err) reject(err);
+            resolve(result[0]);
+        });
+    });
+};
+
 export const findAllLanguages = async (db, requestBody) => {
     return new Promise((resolve, reject) => {
         db.query('CALL find_all_languages()', [], (err, result) => {

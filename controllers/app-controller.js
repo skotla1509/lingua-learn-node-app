@@ -1,6 +1,8 @@
 import * as appDao from './app-dao.js';
 
 const AppController = (app, db) => {
+    app.get('/api/users/:id/stats', (req, res) => getUserStatistics(req, res, db))
+    app.get('/api/users/:id/languages', (req, res) => getUserLanguages(req, res, db))
     app.get('/api/languages/all', (req, res) => getAllSupportedLanguages(req, res, db))
     app.post('/api/languages/:id/learn', (req, res) => addLanguageLearning(req, res, db))
     app.get('/api/languages/decks/:id', (req, res) => getAllDecksLanguages(req, res, db))
@@ -16,6 +18,30 @@ const AppController = (app, db) => {
     app.post('/api/languages/decks/:id/feedback', (req, res) => addNewFeedbackForDeck(req, res, db))
 };
 
+
+const getUserStatistics = async (req, res, db) => {
+    try {
+        const user_id = req.params['id']
+        const result = await appDao.getUserStatistics(db, {user_id});
+        res.json(result);
+    }
+    catch (err) {
+        console.log(err);
+        res.sendStatus(500);
+    }
+}
+
+const getUserLanguages = async (req, res, db) => {
+    try {
+        const user_id = req.params['id']
+        const result = await appDao.getUserLanguages(db, {user_id});
+        res.json(result);
+    }
+    catch (err) {
+        console.log(err);
+        res.sendStatus(500);
+    }
+}
 
 // Register operation
 const getAllSupportedLanguages = async (req, res, db) => {
