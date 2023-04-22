@@ -31,7 +31,7 @@ const register = async (req, res, db) => {
     }
     catch (err) {
         console.log(err);
-        res.sendStatus(500);
+        res.status(500).send({ error: err });
     }
 }
 
@@ -50,7 +50,7 @@ const login = async (req, res, db) => {
     }
     catch (err) {
         console.log(err);
-        res.sendStatus(500);
+        res.status(500).send({ error: err });
     }
 }
 
@@ -68,7 +68,7 @@ const changePassword = async (req, res, db) => {
     }
     catch (err) {
         console.log(err);
-        res.sendStatus(500);
+        res.status(500).send({ error: err });
     }
 }
 

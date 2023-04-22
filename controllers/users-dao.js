@@ -1,20 +1,11 @@
-// READ operation
-export const findUsers = async (db) => {
-    return new Promise((resolve, reject) => {
-        db.query('SELECT * FROM users', (err, result) => {
-            if (err) reject(err);
-            resolve(result);
-        });
-    });
-};
-
 // READ operation by user id
 export const findUserById = async (db, requestBody) => {
     const { user_id } = requestBody;
     return new Promise((resolve, reject) => {
         db.query('CALL find_user_by_id(?)', [user_id], (err, result) => {
             if (err) reject(err);
-            resolve(result[0]);
+            else if (!result[0][0].success) reject(result[0][0].message);
+            else resolve(result[1]);
         });
     });
 };
@@ -25,7 +16,8 @@ export const findUserByCredentials = async (db, requestBody) => {
     return new Promise((resolve, reject) => {
         db.query('CALL find_user_by_credentials(?, ?)', [user_id, password], (err, result) => {
             if (err) reject(err);
-            resolve(result[0]);
+            else if (!result[0][0].success) reject(result[0][0].message);
+            else resolve(result[1]);
         });
     });
 };
@@ -37,24 +29,12 @@ export const createUser = async (db, requestBody) => {
     return new Promise((resolve, reject) => {
         db.query('CALL create_user(?, ?, ?, ?)', [user_id, password, first_name, last_name], (err, result) => {
             if (err) throw reject(err);
-            if (!result[0][0].success) reject(result[0][0].message);
-            resolve(requestBody);
+            else if (!result[0][0].success) reject(result[0][0].message);
+            else resolve(requestBody);
         });
     });
 };
 
-// DELETE operation - TODO not supported
-export const deleteUser = async (db, requestBody) => {
-    const { user_id } = requestBody;
-    return new Promise((resolve, reject) => {
-        db.query('DELETE FROM users WHERE user_id = ?', user_id, (err, result) => {
-            if (err) throw reject(err);
-            resolve({
-                status: 200
-            });
-        });
-    });
-};
 
 // UPDATE operation
 export const updateUserPassword = async (db, requestBody) => {
@@ -64,8 +44,8 @@ export const updateUserPassword = async (db, requestBody) => {
     return new Promise((resolve, reject) => {
         db.query('CALL update_user_password(?, ?)', [user_id, password], (err, result) => {
             if (err) reject(err);
-            if (!result[0][0].success) reject(result[0][0].message);
-            resolve(resolve(requestBody));
+            else if (!result[0][0].success) reject(result[0][0].message);
+            else resolve(resolve(requestBody));
         });
     });
 }

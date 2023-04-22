@@ -5,9 +5,11 @@ const AppController = (app, db) => {
     app.get('/api/users/:id/languages', (req, res) => getUserLanguages(req, res, db))
     app.get('/api/languages/all', (req, res) => getAllSupportedLanguages(req, res, db))
     app.post('/api/languages/:id/learn', (req, res) => addLanguageLearning(req, res, db))
+    app.post('/api/languages/:id/learn/end', (req, res) => endLanguageLearning(req, res, db))
     app.get('/api/languages/decks/:id', (req, res) => getAllDecksLanguages(req, res, db))
     app.get('/api/languages/posts/:id', (req, res) => getAllPostsForLanguages(req, res, db))
     app.post('/api/languages/posts/:id/new', (req, res) => createPostForLanguage(req, res, db))
+    app.delete('/api/languages/posts/:id', (req, res) => deletePostForLanguage(req, res, db))
     app.get('/api/languages/decks/:id/cards', (req, res) => getAllCardsForDeck(req, res, db))
     app.get('/api/languages/decks/:id/questions', (req, res) => getAllPracticeQuestionsForDeck(req, res, db))
     app.post('/api/languages/decks/:id/practice', (req, res) => createPracticeHistoryForLanguage(req, res, db))
@@ -27,7 +29,7 @@ const getUserStatistics = async (req, res, db) => {
     }
     catch (err) {
         console.log(err);
-        res.sendStatus(500);
+        res.status(500).send({ error: err });
     }
 }
 
@@ -39,7 +41,7 @@ const getUserLanguages = async (req, res, db) => {
     }
     catch (err) {
         console.log(err);
-        res.sendStatus(500);
+        res.status(500).send({ error: err });
     }
 }
 
@@ -51,7 +53,7 @@ const getAllSupportedLanguages = async (req, res, db) => {
     }
     catch (err) {
         console.log(err);
-        res.sendStatus(500);
+        res.status(500).send({ error: err });
     }
 }
 
@@ -64,7 +66,20 @@ const addLanguageLearning = async (req, res, db) => {
     }
     catch (err) {
         console.log(err);
-        res.sendStatus(500);
+        res.status(500).send({ error: err });
+    }
+}
+
+const endLanguageLearning = async (req, res, db) => {
+    try {
+        const language_id = req.params['id']
+        const requestBody = {...req.body, language_id}
+        const result = await appDao.endLanguageLearning(db, requestBody);
+        res.json(result);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).send({ error: err });
     }
 }
 
@@ -78,7 +93,7 @@ const getAllDecksLanguages = async (req, res, db) => {
     }
     catch (err) {
         console.log(err);
-        res.sendStatus(500);
+        res.status(500).send({ error: err });
     }
 }
 
@@ -91,7 +106,7 @@ const getAllPostsForLanguages = async (req, res, db) => {
     }
     catch (err) {
         console.log(err);
-        res.sendStatus(500);
+        res.status(500).send({ error: err });
     }
 }
 
@@ -105,7 +120,19 @@ const createPostForLanguage = async (req, res, db) => {
     }
     catch (err) {
         console.log(err);
-        res.sendStatus(500);
+        res.status(500).send({ error: err });
+    }
+}
+
+const deletePostForLanguage = async (req, res, db) => {
+    try {
+        const post_id = req.params['id']
+        const result = await appDao.deletePostForLanguage(db, {post_id} );
+        res.json(result);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).send({ error: err });
     }
 }
 
@@ -118,7 +145,7 @@ const getAllCardsForDeck = async (req, res, db) => {
     }
     catch (err) {
         console.log(err);
-        res.sendStatus(500);
+        res.status(500).send({ error: err });
     }
 }
 
@@ -131,7 +158,7 @@ const getAllPracticeQuestionsForDeck = async (req, res, db) => {
     }
     catch (err) {
         console.log(err);
-        res.sendStatus(500);
+        res.status(500).send({ error: err });
     }
 }
 
@@ -145,7 +172,7 @@ const createPracticeHistoryForLanguage = async (req, res, db) => {
     }
     catch (err) {
         console.log(err);
-        res.sendStatus(500);
+        res.status(500).send({ error: err });
     }
 }
 
@@ -159,7 +186,7 @@ const markUnmarkDeckAsFavoriteForUser = async (req, res, db) => {
     }
     catch (err) {
         console.log(err);
-        res.sendStatus(500);
+        res.status(500).send({ error: err });
     }
 }
 
@@ -173,7 +200,7 @@ const checkFavoriteDeckForUser = async (req, res, db) => {
     }
     catch (err) {
         console.log(err);
-        res.sendStatus(500);
+        res.status(500).send({ error: err });
     }
 }
 
@@ -185,7 +212,7 @@ const getFeedbackForDeck = async (req, res, db) => {
     }
     catch (err) {
         console.log(err);
-        res.sendStatus(500);
+        res.status(500).send({ error: err });
     }
 }
 
@@ -197,7 +224,7 @@ const getAverageFeedbackForDeck = async (req, res, db) => {
     }
     catch (err) {
         console.log(err);
-        res.sendStatus(500);
+        res.status(500).send({ error: err });
     }
 }
 
@@ -210,7 +237,7 @@ const addNewFeedbackForDeck = async (req, res, db) => {
     }
     catch (err) {
         console.log(err);
-        res.sendStatus(500);
+        res.status(500).send({ error: err });
     }
 }
 

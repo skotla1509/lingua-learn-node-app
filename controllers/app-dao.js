@@ -4,7 +4,8 @@ export const getUserStatistics = async (db, requestBody) => {
     return new Promise((resolve, reject) => {
         db.query('CALL find_user_flashcard_stats(?)', [user_id], (err, result) => {
             if (err) reject(err);
-            resolve(result[0]);
+            else if (!result[0][0].success) reject(result[0][0].message);
+            else resolve(result[1]);
         });
     });
 };
@@ -14,7 +15,8 @@ export const getUserLanguages = async (db, requestBody) => {
     return new Promise((resolve, reject) => {
         db.query('CALL find_languages_of_user(?)', [user_id], (err, result) => {
             if (err) reject(err);
-            resolve(result[0]);
+            else if (!result[0][0].success) reject(result[0][0].message);
+            else resolve(result[1]);
         });
     });
 };
@@ -23,7 +25,8 @@ export const findAllLanguages = async (db, requestBody) => {
     return new Promise((resolve, reject) => {
         db.query('CALL find_all_languages()', [], (err, result) => {
             if (err) reject(err);
-            resolve(result[0]);
+            else if (!result[0][0].success) reject(result[0][0].message);
+            else resolve(result[1]);
         });
     });
 };
@@ -33,7 +36,19 @@ export const addLanguageLearning = async (db, requestBody) => {
     return new Promise((resolve, reject) => {
         db.query('CALL add_learning(?, ?)', [user_id, language_id], (err, result) => {
             if (err) reject(err);
-            resolve(result[0]);
+            else if (!result[0][0].success) reject(result[0][0].message);
+            else resolve(result[0]);
+        });
+    });
+};
+
+export const endLanguageLearning = async (db, requestBody) => {
+    const {language_id, user_id} = requestBody;
+    return new Promise((resolve, reject) => {
+        db.query('CALL stop_learning_language(?, ?)', [user_id, language_id], (err, result) => {
+            if (err) reject(err);
+            else if (!result[0][0].success) reject(result[0][0].message);
+            else resolve(result[0]);
         });
     });
 };
@@ -44,7 +59,8 @@ export const findAllDecksForLanguage = async (db, requestBody) => {
     return new Promise((resolve, reject) => {
         db.query('CALL find_all_decks_by_language( ? )', [language_id], (err, result) => {
             if (err) reject(err);
-            resolve(result[0]);
+            else if (!result[0][0].success) reject(result[0][0].message);
+            else resolve(result[1]);
         });
     });
 };
@@ -55,7 +71,8 @@ export const getAllPostsForLanguages = async (db, requestBody) => {
     return new Promise((resolve, reject) => {
         db.query('CALL find_all_posts_by_language( ? )', [language_id], (err, result) => {
             if (err) reject(err);
-            resolve(result[0]);
+            else if (!result[0][0].success) reject(result[0][0].message);
+            else resolve(result[1]);
         });
     });
 };
@@ -66,7 +83,19 @@ export const createPostForLanguage = async (db, requestBody) => {
     return new Promise((resolve, reject) => {
         db.query('CALL create_language_exchange_post( ?, ? , ? )', [user_id,content,language_id], (err, result) => {
             if (err) reject(err);
-            resolve(result[1][0]);
+            else if (!result[0][0].success) reject(result[0][0].message);
+            else resolve(result[1][0]);
+        });
+    });
+};
+
+export const deletePostForLanguage = async (db, requestBody) => {
+    const {post_id} = requestBody;
+    return new Promise((resolve, reject) => {
+        db.query('CALL delete_language_exchange_post( ? )', [post_id], (err, result) => {
+            if (err) reject(err);
+            else if (!result[0][0].success) reject(result[0][0].message);
+            else resolve(post_id);
         });
     });
 };
@@ -77,7 +106,8 @@ export const getAllCardsForDeck = async (db, requestBody) => {
     return new Promise((resolve, reject) => {
         db.query('CALL find_all_cards_by_deck( ? )', [deck_id], (err, result) => {
             if (err) reject(err);
-            resolve(result[0]);
+            else if (!result[0][0].success) reject(result[0][0].message);
+            else resolve(result[1]);
         });
     });
 };
@@ -88,7 +118,8 @@ export const getAllPracticeQuestionsForDeck = async (db, requestBody) => {
     return new Promise((resolve, reject) => {
         db.query('CALL find_all_questions_by_deck( ? )', [deck_id], (err, result) => {
             if (err) reject(err);
-            resolve(result[0]);
+            else if (!result[0][0].success) reject(result[0][0].message);
+            else resolve(result[1]);
         });
     });
 };
@@ -100,7 +131,8 @@ export const createPracticeHistoryForLanguage = async (db, requestBody) => {
     return new Promise((resolve, reject) => {
         db.query('CALL create_practice_history_for_deck( ?, ? ,? )', [user_id,deck_id,score_received], (err, result) => {
             if (err) reject(err);
-            resolve(result[1][0]);
+            else if (!result[0][0].success) reject(result[0][0].message);
+            else resolve(result[1][0]);
         });
     });
 };
@@ -111,7 +143,8 @@ export const markUnmarkDeckAsFavoriteForUser = async (db, requestBody) => {
     return new Promise((resolve, reject) => {
         db.query('CALL mark_unmark_favorite_deck_for_user( ?, ? )', [user_id, deck_id], (err, result) => {
             if (err) reject(err);
-            resolve(result[0]);
+            else if (!result[0][0].success) reject(result[0][0].message);
+            else resolve(result[0]);
         });
     });
 };
@@ -132,7 +165,8 @@ export const getFeedbackForDeck = async (db, requestBody) => {
     return new Promise((resolve, reject) => {
         db.query('CALL find_feedback_of_deck(?)', [deck_id], (err, result) => {
             if (err) reject(err);
-            resolve(result[0]);
+            else if (!result[0][0].success) reject(result[0][0].message);
+            else resolve(result[1]);
         });
     });
 };
@@ -152,7 +186,8 @@ export const addNewFeedbackForDeck = async (db, requestBody) => {
     return new Promise((resolve, reject) => {
         db.query('CALL add_new_feedback(?, ?, ?, ?)', [user_id, deck_id, rating, comment], (err, result) => {
             if (err) reject(err);
-            resolve(result[1][0]);
+            else if (!result[0][0].success) reject(result[0][0].message);
+            else resolve(result[1][0]);
         });
     });
 };
