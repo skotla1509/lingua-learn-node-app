@@ -1,8 +1,14 @@
 # Language Learning App - Node.js Server
 
-## Note
 This Node.js server is designed to demonstrate the functionality and features of the **MySQL database**. It showcases how data is created, updated, and managed via APIs, forming the backend foundation for the Language Learning App.
 
+
+**Note:** For detailed information about the app's features, refer to the **DESIGN-README.md**.
+
+This project is part of a larger system and relies on the following repositories:
+- [React Frontend Repository](https://github.com/skotla1509/lingua-learn-react-app) 
+- [Node.js Backend Repository](https://github.com/skotla1509/lingua-learn-node-app) 
+- [MySQL Database Repository](https://github.com/skotla1509/lingua-learn-db) 
 ---
 
 ## Table of Contents
